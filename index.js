@@ -1,13 +1,13 @@
 class PrintPhrase {
   #phrase;
   #indeces;
+  #printTimeout = 100;
   constructor() {}
 
   async print(phrase) {
     this.#phrase = phrase.toLowerCase();
     this.makeIndecesASCII();
     await this.printPhrase();
-    // console.log(this.#phrase);
   }
 
   async printPhrase() {
@@ -30,7 +30,7 @@ class PrintPhrase {
         return output;
       }
 
-      await this.sleep(100);
+      await this.sleep(this.#printTimeout);
     }
   }
 
@@ -44,7 +44,12 @@ class PrintPhrase {
       this.#indeces.push(this.#phrase.charCodeAt(i));
     }
   }
+
+  setPrintTimeout(miliseconds) {
+    this.#printTimeout = miliseconds;
+  }
 }
 
 const printPhrase = new PrintPhrase();
+printPhrase.setPrintTimeout(26);
 printPhrase.print("hello world");
