@@ -2,10 +2,14 @@ class PrintPhrase {
   #phrase;
   #indeces;
   #printTimeout = 100;
+  #punctuationsAndSymbols = [32, 64];
+  #upperCaseLettersCharCode = [65, 90];
+  #lowerCaseLettersCharCode = [97, 122];
+
   constructor() {}
 
   async print(phrase) {
-    this.#phrase = phrase.toLowerCase();
+    this.#phrase = phrase;
     this.makeIndecesASCII();
     await this.printPhrase();
   }
@@ -19,11 +23,26 @@ class PrintPhrase {
     }
   }
 
+  checkIfNumberFallsIntoRange(number, range) {
+    return number >= range[0] && number <= range[1];
+  }
+
+  choseIndexSet(index) {
+    const ranges = [
+      this.#lowerCaseLettersCharCode,
+      this.#upperCaseLettersCharCode,
+      this.#punctuationsAndSymbols,
+    ];
+
+    return ranges.find((range) =>
+      this.checkIfNumberFallsIntoRange(index, range)
+    );
+  }
+
   async printLowercaseLetters(phrase, index) {
-    for (let i = 97; i <= 122; i++) {
-      if (index === 32) {
-        return " ";
-      }
+    const range = this.choseIndexSet(index);
+
+    for (let i = range[0]; i <= range[1]; i++) {
       const output = String.fromCharCode(i);
       console.log(phrase + output);
       if (i === index) {
@@ -52,4 +71,8 @@ class PrintPhrase {
 
 const printPhrase = new PrintPhrase();
 printPhrase.setPrintTimeout(26);
-printPhrase.print("hello world");
+
+async function process() {
+  await printPhrase.print("Hello, Nick!");
+}
+process();
